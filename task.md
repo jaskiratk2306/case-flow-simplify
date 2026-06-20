@@ -1,0 +1,23 @@
+# Task List - CaseFlow Full-Stack Development
+
+- [x] 1. Backend Initialization
+  - [x] Create `server` directory and install dependencies (`package.json`)
+  - [x] Configure Prisma with SQLite (for easy local setup, easily swappable to Postgres)
+  - [x] Write `prisma/schema.prisma`
+- [x] 2. Core Server Setup
+  - [x] Write `server/src/server.js` (Express configuration, middleware, port)
+  - [x] Write JWT authentication middleware (`server/src/middleware/auth.middleware.js`)
+- [x] 3. API Endpoints
+  - [x] Write Authentication controller (`server/src/controllers/auth.controller.js`)
+  - [x] Write Cases controller (`server/src/controllers/case.controller.js`)
+  - [x] Write Hearings controller (`server/src/controllers/hearing.controller.js`)
+  - [x] Write Analytics controller (`server/src/controllers/analytics.controller.js`)
+- [x] 4. Frontend Integration
+  - [x] Configure Vite Proxy in `vite.config.ts`
+  - [x] Implement `AuthContext` on frontend
+  - [x] Build Login & Register views (`src/pages/Login.jsx`, `src/pages/Register.jsx`)
+  - [x] Connect `Cases.jsx` to backend endpoints
+  - [x] Add `CaseDetail.jsx` showing history/hearings
+  - [x] Integrate roles (Lawyer vs Judge) into the UI flow
+- [x] 5. Deployment Setup
+  - [x] Add production configuration & deployment docs

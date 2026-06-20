@@ -1,0 +1,44 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         String    @default("LAWYER")
+  createdAt    DateTime  @default(now())
+  cases        Case[]    @relation("AssignedJudge")
+}
+
+model Case {
+  id              String    @id
+  title           String
+  description     String?
+  track           String    @default("STANDARD")
+  status          String    @default("PENDING")
+  parties         String
+  filedDate       String    // e.g. YYYY-MM-DD
+  assignedJudgeId String?
+  assignedJudge   User?     @relation("AssignedJudge", fields: [assignedJudgeId], references: [id])
+  createdAt       DateTime  @default(now())
+  hearings        Hearing[]
+}
+
+model Hearing {
+  id          String   @id @default(uuid())
+  caseId      String
+  caseItem    Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  hearingDate String   // e.g. YYYY-MM-DD
+  purpose     String
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
