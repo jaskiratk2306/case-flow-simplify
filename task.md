@@ -21,3 +21,11 @@
   - [x] Integrate roles (Lawyer vs Judge) into the UI flow
 - [x] 5. Deployment Setup
   - [x] Add production configuration & deployment docs
+- [x] 6. Premium UI & Color Gradient Upgrade
+  - [x] Update `src/index.css` with advanced color tokens, gradients, and glassmorphism classes
+  - [x] Redesign `src/components/Navbar.jsx` with glass design and brand gradients
+  - [x] Enhance `src/pages/Home.jsx` with mesh gradient hero, stats strip, and responsive glass cards
+  - [x] Upgrade `src/pages/Login.jsx` & `src/pages/Register.jsx` with card glowing effects and role selector
+  - [x] Enhance `src/pages/Cases.jsx` (gradient stat cards, premium table, improved modal)
+  - [x] Polish `src/pages/CaseDetail.jsx` (timeline with glow nodes, inline success feedback, sidebar logistics)
+

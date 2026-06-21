@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Scale, Mail, Lock, User, AlertCircle, ArrowRight, Shield } from "lucide-react";
+import {
+  Scale,
+  Mail,
+  Lock,
+  User,
+  AlertCircle,
+  ArrowRight,
+  Shield,
+  Eye,
+  EyeOff,
+  CheckCircle,
+} from "lucide-react";
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("LAWYER");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -29,113 +41,190 @@ function Register() {
     }
   };
 
+  const roles = [
+    {
+      value: "LAWYER",
+      label: "Lawyer / Litigant",
+      description: "File and manage cases",
+      icon: "⚖️",
+    },
+    {
+      value: "JUDGE",
+      label: "Judge / Judicial Admin",
+      description: "Adjudicate and assign cases",
+      icon: "🏛️",
+    },
+  ];
+
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-accent/5 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-card p-8 rounded-2xl border border-border shadow-xl">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-primary text-primary-foreground rounded-xl flex items-center justify-center shadow-md">
-            <Scale className="h-6 w-6" />
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-bold font-heading text-foreground">
-            Create an Account
-          </h2>
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link to="/login" className="font-medium text-primary hover:underline">
-              Sign in here
-            </Link>
-          </p>
-        </div>
+    <div className="min-h-[90vh] flex items-center justify-center bg-hero-gradient py-12 px-4 relative overflow-hidden">
+      {/* Ambient orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-[-15%] left-[-8%] w-[40vw] h-[40vw] bg-accent/7 rounded-full blur-[100px] animate-pulse-glow" />
+        <div
+          className="absolute bottom-[-10%] right-[-5%] w-[35vw] h-[35vw] bg-primary/7 rounded-full blur-[90px] animate-pulse-glow"
+          style={{ animationDelay: "1.5s" }}
+        />
+      </div>
 
-        {error && (
-          <div className="bg-destructive/10 text-destructive text-sm p-4 rounded-lg flex items-center gap-3 border border-destructive/20">
-            <AlertCircle className="h-5 w-5 flex-shrink-0" />
-            <span>{error}</span>
+      <div className="relative w-full max-w-md animate-fade-in-up">
+        {/* Card */}
+        <div className="glass-card rounded-3xl p-8 border border-border/60 shadow-2xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="mx-auto w-14 h-14 btn-primary rounded-2xl flex items-center justify-center mb-5 shadow-glow-primary">
+              <Scale className="h-7 w-7 text-white" />
+            </div>
+            <h1 className="text-3xl font-extrabold text-foreground tracking-tight mb-2">
+              Create Account
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              Join CaseFlow and modernize your practice
+            </p>
           </div>
-        )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4 rounded-md shadow-sm">
+          {/* Error alert */}
+          {error && (
+            <div className="flex items-center gap-3 bg-destructive/8 text-destructive text-sm p-4 rounded-xl border border-destructive/20 mb-6 animate-fade-in">
+              <AlertCircle className="h-4.5 w-4.5 flex-shrink-0" />
+              <span className="font-medium">{error}</span>
+            </div>
+          )}
+
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
+              <label htmlFor="reg-name" className="block text-sm font-semibold text-foreground mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
                 <input
+                  id="reg-name"
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Atty. Sarah Miller"
-                  className="pl-10 pr-4 py-2.5 w-full bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="input-premium pl-10 pr-4 py-3 text-sm"
                 />
               </div>
             </div>
 
+            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
+              <label htmlFor="reg-email" className="block text-sm font-semibold text-foreground mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
                 <input
+                  id="reg-email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@court.gov"
-                  className="pl-10 pr-4 py-2.5 w-full bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="input-premium pl-10 pr-4 py-3 text-sm"
                 />
               </div>
             </div>
 
+            {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
+              <label htmlFor="reg-password" className="block text-sm font-semibold text-foreground mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
                 <input
-                  type="password"
+                  id="reg-password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="pl-10 pr-4 py-2.5 w-full bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Min. 8 characters"
+                  className="input-premium pl-10 pr-10 py-3 text-sm"
                 />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1">
-                Judicial / Legal Role
-              </label>
-              <div className="relative">
-                <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="pl-10 pr-4 py-2.5 w-full bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <option value="LAWYER">Lawyer / Litigant</option>
-                  <option value="JUDGE">Judges / Judicial Admin</option>
-                </select>
+                  {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                </button>
               </div>
             </div>
-          </div>
 
-          <div>
+            {/* Role Toggle */}
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                Your Role
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                {roles.map((r) => (
+                  <button
+                    key={r.value}
+                    type="button"
+                    id={`role-${r.value.toLowerCase()}`}
+                    onClick={() => setRole(r.value)}
+                    className={`relative p-4 rounded-xl border text-left transition-all duration-200 ${
+                      role === r.value
+                        ? "border-primary/50 bg-primary/5 ring-2 ring-primary/20"
+                        : "border-border/60 bg-background hover:bg-muted/50 hover:border-border"
+                    }`}
+                  >
+                    {role === r.value && (
+                      <span className="absolute top-2.5 right-2.5">
+                        <CheckCircle className="h-4 w-4 text-primary" />
+                      </span>
+                    )}
+                    <span className="text-xl mb-2 block">{r.icon}</span>
+                    <p className="text-xs font-bold text-foreground leading-tight">{r.label}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">{r.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Submit */}
             <button
+              id="register-submit-btn"
               type="submit"
               disabled={submitting}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-primary-foreground bg-primary hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-50"
+              className="btn-primary w-full py-3.5 rounded-xl text-sm mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {submitting ? "Creating account..." : "Register"}
-              <ArrowRight className="absolute right-4 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              {submitting ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Creating account...
+                </>
+              ) : (
+                <>
+                  Create Account
+                  <ArrowRight className="h-4.5 w-4.5" />
+                </>
+              )}
             </button>
+          </form>
+
+          {/* Footer link */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="font-bold text-primary hover:text-primary/80 transition-colors"
+              >
+                Sign in here
+              </Link>
+            </p>
           </div>
-        </form>
+        </div>
+
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          Protected by judiciary-grade encryption
+        </p>
       </div>
     </div>
   );
