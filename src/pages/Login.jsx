@@ -32,9 +32,9 @@ function Login() {
     <div className="min-h-[90vh] flex items-center justify-center bg-hero-gradient py-12 px-4 relative overflow-hidden">
       {/* Ambient orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-primary/8 rounded-full blur-[100px] animate-pulse-glow" />
+        <div className="absolute top-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-primary/10 rounded-full blur-[100px] animate-pulse-glow" />
         <div
-          className="absolute bottom-[-10%] left-[-5%] w-[35vw] h-[35vw] bg-accent/6 rounded-full blur-[90px] animate-pulse-glow"
+          className="absolute bottom-[-10%] left-[-5%] w-[35vw] h-[35vw] bg-accent/10 rounded-full blur-[90px] animate-pulse-glow"
           style={{ animationDelay: "2s" }}
         />
       </div>
@@ -45,7 +45,7 @@ function Login() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="mx-auto w-14 h-14 btn-primary rounded-2xl flex items-center justify-center mb-5 shadow-glow-primary">
-              <Scale className="h-7 w-7 text-white" />
+              <Scale className="h-7 w-7" style={{ color: "hsl(36 40% 96%)" }} />
             </div>
             <h1 className="text-3xl font-extrabold text-foreground tracking-tight mb-2">
               Welcome back
@@ -57,8 +57,8 @@ function Login() {
 
           {/* Error alert */}
           {error && (
-            <div className="flex items-center gap-3 bg-destructive/8 text-destructive text-sm p-4 rounded-xl border border-destructive/20 mb-6 animate-fade-in">
-              <AlertCircle className="h-4.5 w-4.5 flex-shrink-0" />
+            <div className="flex items-center gap-3 bg-destructive/10 text-destructive text-sm p-4 rounded-xl border border-destructive/20 mb-6 animate-fade-in">
+              <AlertCircle className="h-5 w-5 flex-shrink-0" />
               <span className="font-medium">{error}</span>
             </div>
           )}
@@ -70,7 +70,7 @@ function Login() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                 <input
                   id="login-email"
                   type="email"
@@ -89,7 +89,7 @@ function Login() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                 <input
                   id="login-password"
                   type={showPassword ? "text" : "password"}
@@ -97,14 +97,14 @@ function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="input-premium pl-10 pr-10 py-3 text-sm"
+                  className="input-premium pl-10 pr-11 py-3 text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
             </div>
@@ -124,7 +124,7 @@ function Login() {
               ) : (
                 <>
                   Sign In
-                  <ArrowRight className="h-4.5 w-4.5" />
+                  <ArrowRight className="h-5 w-5" />
                 </>
               )}
             </button>
@@ -136,7 +136,7 @@ function Login() {
               Don't have an account?{" "}
               <Link
                 to="/register"
-                className="font-bold text-primary hover:text-primary/80 transition-colors"
+                className="font-bold text-primary hover:opacity-80 transition-opacity"
               >
                 Create one free
               </Link>
@@ -144,7 +144,6 @@ function Login() {
           </div>
         </div>
 
-        {/* Subtle footnote */}
         <p className="text-center text-xs text-muted-foreground mt-6">
           Protected by judiciary-grade encryption
         </p>

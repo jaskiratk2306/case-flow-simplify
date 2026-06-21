@@ -8,7 +8,6 @@ import {
   User,
   AlertCircle,
   ArrowRight,
-  Shield,
   Eye,
   EyeOff,
   CheckCircle,
@@ -60,9 +59,9 @@ function Register() {
     <div className="min-h-[90vh] flex items-center justify-center bg-hero-gradient py-12 px-4 relative overflow-hidden">
       {/* Ambient orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute top-[-15%] left-[-8%] w-[40vw] h-[40vw] bg-accent/7 rounded-full blur-[100px] animate-pulse-glow" />
+        <div className="absolute top-[-15%] left-[-8%] w-[40vw] h-[40vw] bg-accent/10 rounded-full blur-[100px] animate-pulse-glow" />
         <div
-          className="absolute bottom-[-10%] right-[-5%] w-[35vw] h-[35vw] bg-primary/7 rounded-full blur-[90px] animate-pulse-glow"
+          className="absolute bottom-[-10%] right-[-5%] w-[35vw] h-[35vw] bg-primary/10 rounded-full blur-[90px] animate-pulse-glow"
           style={{ animationDelay: "1.5s" }}
         />
       </div>
@@ -73,7 +72,7 @@ function Register() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="mx-auto w-14 h-14 btn-primary rounded-2xl flex items-center justify-center mb-5 shadow-glow-primary">
-              <Scale className="h-7 w-7 text-white" />
+              <Scale className="h-7 w-7" style={{ color: "hsl(36 40% 96%)" }} />
             </div>
             <h1 className="text-3xl font-extrabold text-foreground tracking-tight mb-2">
               Create Account
@@ -85,8 +84,8 @@ function Register() {
 
           {/* Error alert */}
           {error && (
-            <div className="flex items-center gap-3 bg-destructive/8 text-destructive text-sm p-4 rounded-xl border border-destructive/20 mb-6 animate-fade-in">
-              <AlertCircle className="h-4.5 w-4.5 flex-shrink-0" />
+            <div className="flex items-center gap-3 bg-destructive/10 text-destructive text-sm p-4 rounded-xl border border-destructive/20 mb-6 animate-fade-in">
+              <AlertCircle className="h-5 w-5 flex-shrink-0" />
               <span className="font-medium">{error}</span>
             </div>
           )}
@@ -98,7 +97,7 @@ function Register() {
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                 <input
                   id="reg-name"
                   type="text"
@@ -117,7 +116,7 @@ function Register() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                 <input
                   id="reg-email"
                   type="email"
@@ -136,7 +135,7 @@ function Register() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground pointer-events-none" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
                 <input
                   id="reg-password"
                   type={showPassword ? "text" : "password"}
@@ -144,19 +143,19 @@ function Register() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min. 8 characters"
-                  className="input-premium pl-10 pr-10 py-3 text-sm"
+                  className="input-premium pl-10 pr-11 py-3 text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
             </div>
 
-            {/* Role Toggle */}
+            {/* Role Selector */}
             <div>
               <label className="block text-sm font-semibold text-foreground mb-2">
                 Your Role
@@ -170,8 +169,8 @@ function Register() {
                     onClick={() => setRole(r.value)}
                     className={`relative p-4 rounded-xl border text-left transition-all duration-200 ${
                       role === r.value
-                        ? "border-primary/50 bg-primary/5 ring-2 ring-primary/20"
-                        : "border-border/60 bg-background hover:bg-muted/50 hover:border-border"
+                        ? "border-primary/50 bg-primary/10 ring-2 ring-primary/20"
+                        : "border-border bg-background hover:bg-muted/50 hover:border-primary/30"
                     }`}
                   >
                     {role === r.value && (
@@ -202,7 +201,7 @@ function Register() {
               ) : (
                 <>
                   Create Account
-                  <ArrowRight className="h-4.5 w-4.5" />
+                  <ArrowRight className="h-5 w-5" />
                 </>
               )}
             </button>
@@ -214,7 +213,7 @@ function Register() {
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="font-bold text-primary hover:text-primary/80 transition-colors"
+                className="font-bold text-primary hover:opacity-80 transition-opacity"
               >
                 Sign in here
               </Link>

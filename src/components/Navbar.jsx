@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Scale, Menu, X, LogOut, User as UserIcon, ChevronDown } from "lucide-react";
+import { Scale, Menu, X, LogOut, User as UserIcon, Sun, Moon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +10,7 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
     { path: "/", label: "Home" },
@@ -22,7 +24,6 @@ function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
@@ -46,15 +47,9 @@ function Navbar() {
         <div className="flex items-center justify-between h-16">
 
           {/* ── Logo ── */}
-          <Link
-            to="/"
-            id="nav-logo"
-            className="flex items-center gap-3 group"
-          >
-            <div className="relative">
-              <div className="btn-primary p-2.5 rounded-xl shadow-glow-primary group-hover:scale-105 transition-transform duration-200">
-                <Scale className="h-5 w-5 text-white" />
-              </div>
+          <Link to="/" id="nav-logo" className="flex items-center gap-3 group">
+            <div className="btn-primary p-2.5 rounded-xl shadow-glow-primary group-hover:scale-105 transition-transform duration-200">
+              <Scale className="h-5 w-5" style={{ color: "hsl(36 40% 96%)" }} />
             </div>
             <div>
               <p className="text-lg font-extrabold text-gradient leading-none tracking-tight">
@@ -88,14 +83,27 @@ function Navbar() {
               ))}
             </div>
 
-            {/* Auth area */}
+            {/* Auth + Theme area */}
             <div className="flex items-center gap-3 pl-5 border-l border-border/70">
+              {/* Theme toggle */}
+              <button
+                id="theme-toggle-btn"
+                onClick={toggleTheme}
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all duration-200"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5 text-amber-400" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </button>
+
               {user ? (
                 <>
-                  {/* User pill */}
                   <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-muted/60 border border-border/50">
                     <div className="btn-primary p-1.5 rounded-lg">
-                      <UserIcon className="h-3.5 w-3.5 text-white" />
+                      <UserIcon className="h-3.5 w-3.5" style={{ color: "hsl(36 40% 96%)" }} />
                     </div>
                     <div className="leading-none">
                       <p className="text-xs font-bold text-foreground">{user.name}</p>
@@ -107,9 +115,9 @@ function Navbar() {
                   <button
                     id="nav-logout-btn"
                     onClick={handleLogout}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-destructive px-3 py-2 rounded-lg hover:bg-destructive/8 transition-all duration-200"
+                    className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-destructive px-3 py-2 rounded-lg hover:bg-destructive/10 transition-all duration-200"
                   >
-                    <LogOut className="h-3.5 w-3.5" />
+                    <LogOut className="h-4 w-4" />
                     Logout
                   </button>
                 </>
@@ -125,7 +133,7 @@ function Navbar() {
                   <Link
                     to="/register"
                     id="nav-register-btn"
-                    className="btn-primary px-5 py-2.5 text-sm shadow-none hover:shadow-glow-primary"
+                    className="btn-primary px-5 py-2.5 text-sm rounded-xl"
                   >
                     Get Started
                   </Link>
@@ -134,15 +142,30 @@ function Navbar() {
             </div>
           </div>
 
-          {/* ── Mobile Menu Toggle ── */}
-          <button
-            id="nav-mobile-toggle"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle navigation"
-            className="md:hidden p-2 text-foreground hover:bg-muted/70 rounded-lg transition-colors"
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {/* ── Mobile right side ── */}
+          <div className="md:hidden flex items-center gap-2">
+            {/* Theme toggle (mobile) */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg transition-colors"
+            >
+              {theme === "dark" ? (
+                <Sun className="h-5 w-5 text-amber-400" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </button>
+
+            <button
+              id="nav-mobile-toggle"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle navigation"
+              className="p-2 text-foreground hover:bg-muted/70 rounded-lg transition-colors"
+            >
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         {/* ── Mobile Navigation Drawer ── */}
@@ -155,7 +178,7 @@ function Navbar() {
                   to={link.path}
                   className={`px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${
                     isActive(link.path)
-                      ? "text-primary bg-primary/8 border border-primary/15"
+                      ? "text-primary bg-primary/10 border border-primary/20"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                   }`}
                 >
@@ -169,7 +192,7 @@ function Navbar() {
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-muted/50 border border-border/50">
                     <div className="btn-primary p-2 rounded-lg">
-                      <UserIcon className="h-4 w-4 text-white" />
+                      <UserIcon className="h-4 w-4" style={{ color: "hsl(36 40% 96%)" }} />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-foreground">{user.name}</p>
@@ -180,7 +203,7 @@ function Navbar() {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-destructive py-2.5 px-4 rounded-xl hover:bg-destructive/8 transition-all"
+                    className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-destructive py-2.5 px-4 rounded-xl hover:bg-destructive/10 transition-all"
                   >
                     <LogOut className="h-4 w-4" />
                     Sign out
