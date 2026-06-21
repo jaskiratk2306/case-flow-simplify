@@ -51,7 +51,12 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("Registration error:", error);
-    res.status(500).json({ error: "Internal server error during registration" });
+    const isDbError = error.message?.includes("connect") || error.code === "P1001" || error.code === "P1002";
+    res.status(500).json({
+      error: isDbError
+        ? "Database is warming up. Please try again in a moment."
+        : "Internal server error during registration",
+    });
   }
 };
 
@@ -95,7 +100,12 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ error: "Internal server error during login" });
+    const isDbError = error.message?.includes("connect") || error.code === "P1001" || error.code === "P1002";
+    res.status(500).json({
+      error: isDbError
+        ? "Database is warming up. Please try again in a moment."
+        : "Internal server error during login",
+    });
   }
 };
 
