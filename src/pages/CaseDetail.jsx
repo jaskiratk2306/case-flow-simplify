@@ -13,12 +13,20 @@ import {
   Settings,
   CheckCircle,
   ChevronRight,
+  Printer,
 } from "lucide-react";
+import CaseDocuments from "../components/CaseDocuments.jsx";
+import CaseNotes from "../components/CaseNotes.jsx";
+import CaseActivityLog from "../components/CaseActivityLog.jsx";
 
 function CaseDetail() {
   const { id } = useParams();
   const { token, user } = useAuth();
   const navigate = useNavigate();
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   const [caseItem, setCaseItem] = useState(null);
   const [judges, setJudges] = useState([]);
@@ -206,14 +214,19 @@ function CaseDetail() {
     <div className="min-h-screen bg-background py-8 animate-fade-in">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
 
-        {/* Back nav */}
-        <Link
-          to="/cases"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground mb-7 transition-colors group"
-        >
-          <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
-          Back to Registry
-        </Link>
+        {/* Back nav & Actions */}
+        <div className="flex items-center justify-between mb-7">
+          <Link
+            to="/cases"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors group print:hidden"
+          >
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+            Back to Registry
+          </Link>
+          <button onClick={handlePrint} className="btn-primary px-3 py-1.5 text-xs rounded-xl flex items-center gap-1.5 print:hidden">
+            <Printer className="h-4 w-4" /> Export PDF
+          </button>
+        </div>
 
         {/* Error */}
         {error && (
@@ -409,6 +422,16 @@ function CaseDetail() {
                 )}
               </div>
             </div>
+
+            {/* Documents Section */}
+            <div className="print:hidden">
+              <CaseDocuments caseId={id} />
+            </div>
+
+            {/* Notes Section */}
+            <div className="print:hidden">
+              <CaseNotes caseId={id} />
+            </div>
           </div>
 
           {/* ── Sidebar ── */}
@@ -455,6 +478,14 @@ function CaseDetail() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Case Activity Log */}
+            <div className="glass-card rounded-3xl border border-border/50 p-6 shadow-lg">
+              <h3 className="text-sm font-extrabold text-foreground uppercase tracking-widest mb-5">
+                Activity Timeline
+              </h3>
+              <CaseActivityLog caseId={id} />
             </div>
 
             {/* Judicial Actions — Judge only */}

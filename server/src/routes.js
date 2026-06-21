@@ -23,8 +23,23 @@ router.post("/cases", authenticateToken, createCase);
 router.put("/cases/:id", authenticateToken, updateCase);
 
 // Hearing Routes (authenticated)
+import { getHearingsByCase, scheduleHearing, getAllHearings } from "./controllers/hearing.controller.js";
 router.get("/cases/:id/hearings", authenticateToken, getHearingsByCase);
 router.post("/cases/:id/hearings", authenticateToken, requireRole(["JUDGE"]), scheduleHearing);
+router.get("/hearings", authenticateToken, getAllHearings);
+
+// Document Routes (authenticated)
+import { getDocuments, uploadDocument, downloadDocument, deleteDocument } from "./controllers/document.controller.js";
+router.get("/cases/:id/documents", authenticateToken, getDocuments);
+router.post("/cases/:id/documents", authenticateToken, uploadDocument);
+router.get("/cases/:id/documents/:docId/download", authenticateToken, downloadDocument);
+router.delete("/cases/:id/documents/:docId", authenticateToken, deleteDocument);
+
+// Activity & Notes Routes (authenticated)
+import { getCaseActivity, getCaseNotes, addCaseNote } from "./controllers/notes.controller.js";
+router.get("/cases/:id/activity", authenticateToken, getCaseActivity);
+router.get("/cases/:id/notes", authenticateToken, getCaseNotes);
+router.post("/cases/:id/notes", authenticateToken, addCaseNote);
 
 // Analytics Route (authenticated)
 router.get("/analytics", authenticateToken, getAnalytics);

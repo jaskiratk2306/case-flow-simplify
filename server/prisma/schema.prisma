@@ -3,42 +3,81 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 generator client {
   provider = "prisma-client-js"
 }
 
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
+  id           String         @id @default(uuid())
+  email        String         @unique
   passwordHash String
   name         String
-  role         String    @default("LAWYER")
-  createdAt    DateTime  @default(now())
-  cases        Case[]    @relation("AssignedJudge")
+  role         String         @default("LAWYER")
+  createdAt    DateTime       @default(now())
+  cases        Case[]         @relation("AssignedJudge")
+  uploadedDocs Document[]     @relation("UploadedDocs")
+  activities   CaseActivity[] @relation("ActorActivities")
+  notes        CaseNote[]     @relation("AuthorNotes")
 }
 
 model Case {
-  id              String    @id
+  id              String         @id
   title           String
   description     String?
-  track           String    @default("STANDARD")
-  status          String    @default("PENDING")
+  track           String         @default("STANDARD")
+  status          String         @default("PENDING")
   parties         String
-  filedDate       String    // e.g. YYYY-MM-DD
+  filedDate       String
   assignedJudgeId String?
-  assignedJudge   User?     @relation("AssignedJudge", fields: [assignedJudgeId], references: [id])
-  createdAt       DateTime  @default(now())
+  assignedJudge   User?          @relation("AssignedJudge", fields: [assignedJudgeId], references: [id])
+  createdAt       DateTime       @default(now())
   hearings        Hearing[]
+  documents       Document[]
+  activities      CaseActivity[]
+  notes           CaseNote[]
 }
 
 model Hearing {
   id          String   @id @default(uuid())
   caseId      String
   caseItem    Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
-  hearingDate String   // e.g. YYYY-MM-DD
+  hearingDate String
   purpose     String
   notes       String?
   createdAt   DateTime @default(now())
 }
 
+model Document {
+  id           String   @id @default(uuid())
+  caseId       String
+  caseItem     Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  filename     String
+  data         String   // base64 encoded content
+  mimeType     String
+  size         Int      // bytes
+  uploadedById String
+  uploadedBy   User     @relation("UploadedDocs", fields: [uploadedById], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model CaseActivity {
+  id        String   @id @default(uuid())
+  caseId    String
+  caseItem  Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  actorId   String
+  actor     User     @relation("ActorActivities", fields: [actorId], references: [id])
+  action    String   // STATUS_CHANGED | TRACK_CHANGED | JUDGE_ASSIGNED | HEARING_SCHEDULED | NOTE_ADDED | DOC_UPLOADED
+  oldValue  String?
+  newValue  String?
+  createdAt DateTime @default(now())
+}
+
+model CaseNote {
+  id        String   @id @default(uuid())
+  caseId    String
+  caseItem  Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation("AuthorNotes", fields: [authorId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}

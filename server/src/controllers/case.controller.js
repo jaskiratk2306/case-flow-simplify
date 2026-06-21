@@ -163,6 +163,23 @@ export const updateCase = async (req, res) => {
       },
     });
 
+    // Log activities for the changes
+    if (updateData.status && updateData.status !== existingCase.status) {
+      await prisma.caseActivity.create({
+        data: { caseId: id, actorId: req.user.id, action: "STATUS_CHANGED", oldValue: existingCase.status, newValue: updateData.status },
+      });
+    }
+    if (updateData.track && updateData.track !== existingCase.track) {
+      await prisma.caseActivity.create({
+        data: { caseId: id, actorId: req.user.id, action: "TRACK_CHANGED", oldValue: existingCase.track, newValue: updateData.track },
+      });
+    }
+    if (updateData.assignedJudgeId !== undefined && updateData.assignedJudgeId !== existingCase.assignedJudgeId) {
+      await prisma.caseActivity.create({
+        data: { caseId: id, actorId: req.user.id, action: "JUDGE_ASSIGNED", oldValue: existingCase.assignedJudgeId, newValue: updateData.assignedJudgeId },
+      });
+    }
+
     res.json(updatedCase);
   } catch (error) {
     console.error("UpdateCase error:", error);

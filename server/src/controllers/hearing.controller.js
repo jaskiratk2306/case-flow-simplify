@@ -49,3 +49,20 @@ export const getHearingsByCase = async (req, res) => {
     res.status(500).json({ error: "Internal server error fetching hearings" });
   }
 };
+
+export const getAllHearings = async (req, res) => {
+  try {
+    const hearings = await prisma.hearing.findMany({
+      orderBy: { hearingDate: "asc" },
+      include: {
+        caseItem: {
+          select: { title: true },
+        },
+      },
+    });
+    res.json(hearings);
+  } catch (error) {
+    console.error("GetAllHearings error:", error);
+    res.status(500).json({ error: "Internal server error fetching all hearings" });
+  }
+};
